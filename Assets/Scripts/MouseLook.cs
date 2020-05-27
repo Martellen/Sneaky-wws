@@ -1,35 +1,62 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class MouseLook : MonoBehaviour
 {
-    public float mouseSensitivity = 100f;
-    public Transform playerBody;
+    #region Class variables
+    [SerializeField]
+    private float mouseSensitivity = 100f;
+    [SerializeField]
+    private Transform playerBody;
 
+    private float xAxisRotation;
+    private float yAxisRotation;
     private float mouseAxisX;
     private float mouseAxisY;
+    private float deltaTime;
     private float xCameraRotation = 0f;
+    #endregion
 
+    #region Unity methods
     // Start is called before the first frame update
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
-        playerBody = gameObject.GetComponentInParent<Transform>().parent;
+        if (!playerBody)
+        {
+            playerBody = gameObject.GetComponentInParent<Transform>().parent;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        mouseAxisX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
-        mouseAxisY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
-
-        xCameraRotation -= mouseAxisY;
-        xCameraRotation = Mathf.Clamp(xCameraRotation, -90f, 90f);
-
-        transform.localRotation = Quaternion.Euler(xCameraRotation, 0f, 0f);
-
-        playerBody.Rotate(Vector3.up * mouseAxisX);
-
+        Initialize();
+        RotatCamera();
+        RotateBody();
     }
+    #endregion
+
+    #region Custom methods
+    void Initialize()
+    {
+        deltaTime = Time.deltaTime;
+        mouseAxisX = Input.GetAxis("Mouse X");
+        mouseAxisY = Input.GetAxis("Mouse Y");
+        xAxisRotation = mouseAxisX * mouseSensitivity * deltaTime;
+        yAxisRotation = mouseAxisY * mouseSensitivity * deltaTime;
+
+        xCameraRotation -= yAxisRotation;
+        xCameraRotation = Mathf.Clamp(xCameraRotation, -90f, 90f);
+    }
+
+    void RotatCamera()
+    {
+        transform.localRotation = Quaternion.Euler(xCameraRotation, 0f, 0f);
+    }
+
+    void RotateBody()
+    {
+        playerBody.Rotate(Vector3.up * xAxisRotation);
+    }
+    #endregion
 }
