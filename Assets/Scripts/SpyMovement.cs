@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class SpyMovement : MonoBehaviour
 {
     public float speed = 5f;
     public float jumpHeight = 2f;

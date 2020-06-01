@@ -8,7 +8,7 @@ public class SoundsForJoinAndLeave : MonoBehaviourPunCallbacks
     public AudioClip LeaveClip;
     private AudioSource source;
 
-    public override void OnPlayerEnteredRoom(Player newPlayer)
+    public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
         if (this.JoinClip != null)
         {
@@ -17,7 +17,7 @@ public class SoundsForJoinAndLeave : MonoBehaviourPunCallbacks
         }
     }
 
-    public override void OnPlayerLeftRoom(Player otherPlayer)
+    public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
     {
         if (this.LeaveClip != null)
         {
